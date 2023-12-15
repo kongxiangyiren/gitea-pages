@@ -1,0 +1,92 @@
+{
+  "name": "gitea-pages",
+  "description": "gitea pages",
+  "version": "0.0.1",
+  "author": "空巷一人 <1530688385@qq.com>",
+  "bin": "pkg-run.js",
+  "scripts": {
+    "start": "node development.js",
+    "compile": "npm run format && npm run lint && tsc",
+    "lint": "tslint \"src/**/*.ts\"",
+    "vercel-build": "npm run compile",
+    "build": "node build.mjs",
+    "format": "prettier --write src/",
+    "pkg": "npm run compile && pkg . -C GZip --no-bytecode --public-packages \"*\" --public"
+  },
+  "pkg": {
+    "scripts": [
+      "view/**/*",
+      "config.js"
+    ],
+    "assets": [
+      "./node_modules/axios/dist/node/axios.cjs",
+      "app/**/*"
+    ],
+    "targets": [
+      "node12-win-x64",
+      "node12-linux-x64"
+    ],
+    "outputPath": "dist-pkg"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "dns-sync": "^0.2.1",
+    "think-cache": "^1.1.2",
+    "think-cache-file": "^1.1.2",
+    "think-logger3": "^1.4.0",
+    "think-session": "^1.1.6",
+    "think-session-file": "^1.1.4",
+    "think-view": "^1.0.13",
+    "think-view-nunjucks": "^1.0.11",
+    "thinkjs": "^3.2.15",
+    "thinkjs3-ts": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/koa": "*",
+    "@types/node": "12.20.11",
+    "node-notifier": "^10.0.1",
+    "pkg": "5.8.1",
+    "prettier": "^3.1.1",
+    "think-inspect": "0.0.2",
+    "think-typescript": "^2.0.0",
+    "think-watcher": "^3.0.4",
+    "tslint": "^5.20.1",
+    "typescript": "^4.9.5"
+  },
+  "resolutions": {
+    "think-helper": "^1.1.4",
+    "formidable": "^2.1.2",
+    "ms": "^2.0.0",
+    "xml2js": "^0.5.0",
+    "validator": "^13.7.0",
+    "think-payload": "file:pack/think-payload-1.4.0.tgz",
+    "think-validator": "file:pack/think-validator-1.6.7.tgz"
+  },
+  "overrides": {
+    "think-helper": "^1.1.4",
+    "formidable": "^2.1.2",
+    "ms": "^2.0.0",
+    "xml2js": "^0.5.0",
+    "validator": "^13.7.0",
+    "think-payload": "file:pack/think-payload-1.4.0.tgz",
+    "think-validator": "file:pack/think-validator-1.6.7.tgz"
+  },
+  "repository": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 12",
+    "npm": ">= 8"
+  },
+  "readmeFilename": "README.md",
+  "thinkjs": {
+    "metadata": {
+      "name": "gitea-pages",
+      "description": "gitea pages",
+      "author": "空巷一人 <1530688385@qq.com>"
+    },
+    "projectName": "gitea-pages",
+    "template": "kongxiangyiren/typescript",
+    "clone": false,
+    "isMultiModule": false
+  }
+}

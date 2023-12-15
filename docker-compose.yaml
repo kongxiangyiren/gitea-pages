@@ -1,0 +1,13 @@
+version: '3'
+services:
+  gitea-pages:
+    container_name: gitea-pages
+    build: # 使用 Dockerfile 本地构建
+      context: ./
+    restart: always
+    ports:
+      - '8360:8360' # 映射端口，格式"主机端口:容器内部端口"
+    volumes:
+      - ./view/:/app/view/
+      - ./logs/:/app/logs/
+      - ./config.js:/app/config.js
