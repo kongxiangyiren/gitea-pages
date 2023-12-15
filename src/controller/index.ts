@@ -55,7 +55,7 @@ export default class extends Base {
             this.ctx.url === '/' ? '/index.html' : this.ctx.url
           }`;
 
-          const response = await axios.get(url);
+          const response = await axios.get(url, { responseType: 'arraybuffer' });
 
           // 修改MIME类型
           this.ctx.set(
