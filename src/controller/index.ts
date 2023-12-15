@@ -1,6 +1,7 @@
 import Base from './base.js';
 import axios from 'axios';
 import dnsSync from 'dns-sync';
+import mime from 'mime';
 export default class extends Base {
   async indexAction() {
     const pages = this.removeLastOccurrence(this.ctx.host, this.config('pagesDomainName'));
@@ -55,6 +56,15 @@ export default class extends Base {
           }`;
 
           const response = await axios.get(url);
+
+          // 修改MIME类型
+          this.ctx.set(
+            'Content-Type',
+            // @ts-expect-error
+            mime.getType(
+              this.ctx.url.split('/').pop() === '' ? 'index.html' : this.ctx.url.split('/').pop()
+            ) ?? 'text/plain'
+          );
           this.ctx.body = response.data; // 将响应数据设置为Koa的响应体
         } catch (error) {
           this.ctx.status = error.response.status;
