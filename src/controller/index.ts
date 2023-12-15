@@ -43,7 +43,10 @@ export default class extends Base {
             `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main/CNAME`
           );
 
-          if (this.isDomain(response.data.toString().trim())) {
+          if (
+            this.isDomain(response.data.toString().trim()) &&
+            this.ctx.host !== response.data.toString().trim()
+          ) {
             this.ctx.status = 301;
             return this.redirect(`http://${response.data.toString().trim()}${this.ctx.url}`);
           }
