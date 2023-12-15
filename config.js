@@ -7,6 +7,6 @@ module.exports = {
   giteaUrl: 'https://gitea.com',
   // user 白名单
   whiteList: ['kongxiangyiren'],
-  // user 黑名单 如果blackList配置了就失效
+  // user 黑名单 如果whiteList配置了就失效
   blackList: []
 };
