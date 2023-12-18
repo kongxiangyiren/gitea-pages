@@ -1,5 +1,6 @@
 // 生产环境使用
 module.exports = {
+  // workers: 0, // 进程数(最大为cpu数，0为全部启用)
   port: 8360, // 服务器端口,默认 8360
   // pages 服务器域名
   pagesDomainName: 'localhost:8360',
