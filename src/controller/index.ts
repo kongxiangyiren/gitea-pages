@@ -18,9 +18,6 @@ export default class extends Base {
           this.ctx.status = 404;
           return this.display('404');
         }
-        this.assign({
-          pagesDomainName: this.config('pagesDomainName')
-        });
         return this.display('index');
       } else if (pagesList.length === 2) {
         // 有Gitea用户名

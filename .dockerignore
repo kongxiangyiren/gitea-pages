@@ -37,3 +37,5 @@ config.development.js
 adapter.development.js
 dist/
 dist-pkg/
+view/404.html
+view/index.html

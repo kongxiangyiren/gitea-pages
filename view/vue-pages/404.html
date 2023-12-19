@@ -3,14 +3,14 @@
 
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="<%= favicon %>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gitea Pages</title>
+  <title>Site not found · Gitea Pages</title>
 </head>
 
 <body>
-  <div>
-    只支持pages仓库的main分支,访问地址为 < Gitea用户名 >.{{pagesDomainName}}
-  </div>
+  <div id="app"></div>
+  <script type="module" src="/src/404/main.ts"></script>
 </body>
 
 </html>
