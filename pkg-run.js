@@ -32,9 +32,6 @@ function conf(vax, fa) {
 
 think.beforeStartServer(() => {
   const configFile = path.join(process.cwd(), 'config.js');
-  if (!existsSync(configFile)) {
-    copyFileSync(path.join(__dirname, './config.js'), configFile);
-  }
 
   if (!existsSync(path.join(process.cwd(), './view'))) {
     mkdirSync(path.join(process.cwd(), 'view'));
@@ -49,6 +46,12 @@ think.beforeStartServer(() => {
       path.join(__dirname, 'view/index.html'),
       path.join(process.cwd(), 'view/index.html')
     );
+  }
+
+  if (!existsSync(configFile)) {
+    copyFileSync(path.join(__dirname, './config.js'), configFile);
+    console.log('Please modify config.js and restart');
+    process.exit();
   }
 
   const config = require(configFile);

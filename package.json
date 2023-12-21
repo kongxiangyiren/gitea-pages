@@ -16,13 +16,13 @@
   },
   "pkg": {
     "scripts": [
-      "view/404.html",
-      "view/index.html",
       "config.js"
     ],
     "assets": [
       "./node_modules/axios/dist/node/axios.cjs",
-      "app/**/*"
+      "app/**/*",
+      "view/404.html",
+      "view/index.html"
     ],
     "targets": [
       "node12-win-x64",
