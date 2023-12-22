@@ -5,7 +5,7 @@
   "author": "空巷一人",
   "bin": "pkg-run.js",
   "scripts": {
-    "postinstall": "cd ./view/vue-pages && npm i && cd ../../",
+    "postinstall": "cd ./view/vue-pages && npm i && cd ../../ && patch-package",
     "start": "concurrently \"cd ./view/vue-pages && npm run watch\" \"node development.js\"",
     "compile": "cd ./view/vue-pages && npm run build && cd ../../ && npm run format && npm run lint && tsc",
     "lint": "tslint \"src/**/*.ts\"",
@@ -50,6 +50,7 @@
     "@types/node": "12.20.11",
     "concurrently": "^8.2.2",
     "node-notifier": "^10.0.1",
+    "patch-package": "^8.0.0",
     "pkg": "5.8.1",
     "prettier": "^3.1.1",
     "resedit": "^2.0.0",
