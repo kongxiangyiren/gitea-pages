@@ -1,6 +1,19 @@
+const { program } = require('commander');
 const { existsSync, copyFileSync, mkdirSync } = require('fs');
 const path = require('path');
 const Application = require('thinkjs');
+
+program
+  .name(require('./package.json').name)
+  .version(require('./package.json').version, '-v, --version')
+  .description(
+`DESCRIPTION:
+  By default, the first run creates a config.js, in which you can modify the configuration.
+The default url is http://localhost:8360.`
+  )
+  .addHelpCommand(false);
+
+program.parse(process.argv);
 
 const instance = new Application({
   RUNTIME_PATH: path.join(process.cwd(), 'runtime'),

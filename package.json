@@ -1,8 +1,8 @@
 {
   "name": "gitea-pages",
   "description": "gitea pages",
-  "version": "0.0.3",
-  "author": "空巷一人 <1530688385@qq.com>",
+  "version": "0.0.4",
+  "author": "空巷一人",
   "bin": "pkg-run.js",
   "scripts": {
     "postinstall": "cd ./view/vue-pages && npm i && cd ../../",
@@ -12,7 +12,7 @@
     "vercel-build": "npm run compile",
     "build": "node build.mjs",
     "format": "prettier --write src/",
-    "pkg": "npm run compile && pkg . -C GZip --no-bytecode --public-packages \"*\" --public"
+    "pkg": "npm run compile && pkg . -C GZip --no-bytecode --public-packages \"*\" --public && node pkg-edit.mjs"
   },
   "pkg": {
     "scripts": [
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "axios": "^1.6.2",
+    "commander": "^9.5.0",
     "dns-sync": "^0.2.1",
     "mime": "^3.0.0",
     "think-cache": "^1.1.2",
@@ -51,6 +52,7 @@
     "node-notifier": "^10.0.1",
     "pkg": "5.8.1",
     "prettier": "^3.1.1",
+    "resedit": "^2.0.0",
     "think-inspect": "0.0.2",
     "think-typescript": "^2.0.0",
     "think-watcher": "^3.0.4",
@@ -78,7 +80,7 @@
   "repository": "",
   "license": "MIT",
   "engines": {
-    "node": ">= 12",
+    "node": "^12.20.0 || >=14",
     "npm": ">= 8"
   },
   "readmeFilename": "README.md",
@@ -86,7 +88,7 @@
     "metadata": {
       "name": "gitea-pages",
       "description": "gitea pages",
-      "author": "空巷一人 <1530688385@qq.com>"
+      "author": "空巷一人"
     },
     "projectName": "gitea-pages",
     "template": "kongxiangyiren/typescript",
