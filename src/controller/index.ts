@@ -61,7 +61,6 @@ export default class extends Base {
           // 修改MIME类型
           this.ctx.set(
             'Content-Type',
-            // @ts-expect-error
             mime.getType(
               this.ctx.url.split('/').pop() === '' ? 'index.html' : this.ctx.url.split('/').pop()
             ) ?? 'text/plain'
