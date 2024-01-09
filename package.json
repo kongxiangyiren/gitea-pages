@@ -1,7 +1,7 @@
 {
   "name": "gitea-pages",
   "description": "gitea pages",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "空巷一人",
   "bin": "pkg-run.js",
   "scripts": {
@@ -48,6 +48,7 @@
   "devDependencies": {
     "@types/koa": "*",
     "@types/node": "12.20.11",
+    "@types/validator": "^13.11.7",
     "concurrently": "^8.2.2",
     "node-notifier": "^10.0.1",
     "patch-package": "^8.0.0",

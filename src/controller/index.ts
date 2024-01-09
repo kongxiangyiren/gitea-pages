@@ -29,9 +29,13 @@ export default class extends Base {
           this.ctx.status = 404;
           return this.display('404');
         }
-        // 如果黑名单存在,并且不存在pagesList[0]
+        // 如果白名单不存在,黑名单存在,并且不存在pagesList[0]
         const blackList = this.config('blackList') ?? [];
-        if (!think.isEmpty(blackList) && blackList.includes(pagesList[0])) {
+        if (
+          think.isEmpty(whiteList) &&
+          !think.isEmpty(blackList) &&
+          blackList.includes(pagesList[0])
+        ) {
           this.ctx.status = 404;
           return this.display('404');
         }
