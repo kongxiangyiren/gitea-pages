@@ -1,7 +1,7 @@
 {
   "name": "gitea-pages",
   "description": "gitea pages",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "空巷一人",
   "bin": "pkg-run.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "outputPath": "dist-pkg"
   },
   "dependencies": {
-    "axios": "^1.6.2",
+    "axios": "^1.6.5",
     "commander": "^9.5.0",
     "dns-sync": "^0.2.1",
     "mime": "^3.0.0",
