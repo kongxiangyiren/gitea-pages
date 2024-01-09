@@ -1,14 +1,84 @@
 # Gitea Pages
 
-## Run File Download
+## 可执行文件下载地址
 
 [github](https://github.com/kongxiangyiren/gitea-pages/releases/latest)
 
-## Features
+## 注意
 
-- Proxies `<owner>.<domain>/` => `owner/pages/main`
+1、只支持pages仓库的main分支,对应域名为`<用户名>.<domain>`
+2、暂不支持自动申请ssl证书
 
-## Nginx pseudo-static
+## 可执行文件部署
+
+### iis 部署
+
+1、下载gitea-pages-win.exe
+
+[github](https://github.com/kongxiangyiren/gitea-pages/releases/latest)
+
+2、[下载安装 aspNetCore](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/runtime-aspnetcore-8.0.0-windows-hosting-bundle-installer)
+
+3、双击运行gitea-pages-win.exe
+
+4、修改生成的`config.js`中的`port: 8360` 为`port: process.env.ASPNETCORE_PORT`
+
+如：
+
+```javascript
+// 生产环境使用
+module.exports = {
+  // workers: 0, // 进程数(最大为cpu数，0为全部启用)
+  port: process.env.ASPNETCORE_PORT, // 服务器端口,默认 8360
+  // pages 服务器域名
+  pagesDomainName: 'localhost',
+  // gitea url 结尾不要 /
+  giteaUrl: 'https://gitea.com',
+  // user 白名单
+  whiteList: [],
+  // user 黑名单 如果whiteList配置了就失效
+  blackList: []
+};
+```
+
+5、自行修改`config.js`的其他配置
+
+6、创建web.config
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <location path="." inheritInChildApplications="false">
+    <system.webServer>
+      <handlers>
+        <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+      </handlers>
+      <aspNetCore processPath=".\gitea-pages-win.exe" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" hostingModel="outofprocess" />
+    </system.webServer>
+  </location>
+</configuration>
+```
+
+### linux 部署
+
+1、下载gitea-pages-linux
+
+[github](https://github.com/kongxiangyiren/gitea-pages/releases/latest)
+
+2、运行gitea-pages-linux
+
+```sh
+./gitea-pages-linux
+```
+
+3、修改生成的`config.js`
+
+4、 持久运行
+```
+nohup ./gitea-pages-linux &
+```
+
+5、 Nginx代理
 
 ```nginx
 
