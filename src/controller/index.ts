@@ -2,6 +2,7 @@ import Base from './base.js';
 import axios from 'axios';
 import dnsSync from 'dns-sync';
 import mime from 'mime';
+import { extname } from 'path';
 export default class extends Base {
   async indexAction() {
     const pages = this.removeLastOccurrence(this.ctx.host, this.config('pagesDomainName'));
@@ -65,6 +66,16 @@ export default class extends Base {
               this.ctx.url.split('/').pop() === '' ? 'index.html' : this.ctx.url.split('/').pop()
             ) ?? 'text/plain'
           );
+
+          if (
+            !think.isEmpty(this.config('cacheSuffixName')) &&
+            /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i.test(
+              extname(this.ctx.url.split('/').pop())
+            )
+          ) {
+            // 设置缓存30天
+            this.ctx.set('cache-control', 'max-age=' + 30 * 24 * 60 * 60);
+          }
           this.ctx.body = response.data; // 将响应数据设置为Koa的响应体
         } catch (error) {
           this.ctx.status = error.response.status;

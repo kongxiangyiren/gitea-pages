@@ -9,5 +9,7 @@ module.exports = {
   // user 白名单
   whiteList: ['kongxiangyiren'],
   // user 黑名单 如果whiteList配置了就失效
-  blackList: []
+  blackList: [],
+  // 缓存文件后缀名，如果匹配设置缓存30天
+  cacheSuffixName: /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i
 };
