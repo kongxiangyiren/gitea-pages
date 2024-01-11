@@ -6,5 +6,9 @@ export = {
   giteaUrl: 'https://gitea.com',
   cacheSuffixName: /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i,
   whiteList: [],
-  blackList: []
+  blackList: [],
+  gzip: {
+    enable: true,
+    threshold: 1024
+  }
 };

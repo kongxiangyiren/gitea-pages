@@ -70,15 +70,16 @@ export default class extends Base {
             ) ?? 'text/plain'
           );
 
+          // 设置缓存30天
           if (
             !think.isEmpty(this.config('cacheSuffixName')) &&
             /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i.test(
               extname(this.ctx.url.split('/').pop())
             )
           ) {
-            // 设置缓存30天
             this.ctx.set('cache-control', 'max-age=' + 30 * 24 * 60 * 60);
           }
+
           this.ctx.body = response.data; // 将响应数据设置为Koa的响应体
         } catch (error) {
           this.ctx.status = error.response.status;

@@ -200,6 +200,14 @@
   dependencies:
     "@types/koa" "*"
 
+"@types/koa-compress@^4.0.6":
+  version "4.0.6"
+  resolved "https://registry.npmmirror.com/@types/koa-compress/-/koa-compress-4.0.6.tgz#591bb270e3212cb1f9be587510daea5629037c52"
+  integrity sha512-jJzlsQTeIXRfQzY7y2Dl/syqOxvEaNJzFTJ8ZGaDFWvqgMmCXplfCGjPfHQgU7xYNKq/mCdN3YWus1YOldfIwg==
+  dependencies:
+    "@types/koa" "*"
+    "@types/node" "*"
+
 "@types/koa@*":
   version "2.13.12"
   resolved "https://registry.npmmirror.com/@types/koa/-/koa-2.13.12.tgz#70d87a9061a81909e0ee11ca50168416e8d3e795"
@@ -405,7 +413,7 @@ builtin-modules@^1.1.1:
   resolved "https://registry.npmmirror.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
   integrity sha512-wxXCdllwGhI2kCC0MnvTGYTMvnVZTvqgypkiTI8Pa5tcz2i6VqsqwYGgqwXji+4RgCzms6EajE4IxiUH6HH8nQ==
 
-bytes@3.1.2:
+bytes@3.1.2, bytes@^3.1.2:
   version "3.1.2"
   resolved "https://registry.npmmirror.com/bytes/-/bytes-3.1.2.tgz#8b0beeb98605adf1b128fa4386403c009e0221a5"
   integrity sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==
@@ -522,6 +530,13 @@ commander@^9.5.0:
   version "9.5.0"
   resolved "https://registry.npmmirror.com/commander/-/commander-9.5.0.tgz#bc08d1eb5cedf7ccb797a96199d41c7bc3e60d30"
   integrity sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==
+
+compressible@^2.0.18:
+  version "2.0.18"
+  resolved "https://registry.npmmirror.com/compressible/-/compressible-2.0.18.tgz#af53cca6b070d4c3c0750fbd77286a6d7cc46fba"
+  integrity sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==
+  dependencies:
+    mime-db ">= 1.43.0 < 2"
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -1031,7 +1046,7 @@ http-errors@2.0.0:
     statuses "2.0.1"
     toidentifier "1.0.1"
 
-http-errors@^1.6.3, http-errors@~1.8.0:
+http-errors@^1.6.3, http-errors@^1.8.1, http-errors@~1.8.0:
   version "1.8.1"
   resolved "https://registry.npmmirror.com/http-errors/-/http-errors-1.8.1.tgz#7c3f28577cbc8a207388455dbd62295ed07bd68c"
   integrity sha512-Kpk9Sm7NmI+RHhnj6OIWDI1d6fIoFAtFt9RLaTMRlg/8w49juAStsrBgp0Dp4OdxdVbRIeKhtCUvoi/RuAhO4g==
@@ -1276,6 +1291,16 @@ koa-compose@^4.1.0:
   resolved "https://registry.npmmirror.com/koa-compose/-/koa-compose-4.1.0.tgz#507306b9371901db41121c812e923d0d67d3e877"
   integrity sha512-8ODW8TrDuMYvXRwra/Kh7/rJo9BtOfPc6qO8eAfC80CnCvSjSl0bkRM24X6/XBBEyj0v1nRUQ1LyOy3dbqOWXw==
 
+koa-compress@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.npmmirror.com/koa-compress/-/koa-compress-5.1.1.tgz#4f1599cfcaab23de1cd97d0a0ff9b5d05b0ffa52"
+  integrity sha512-UgMIN7ZoEP2DuoSQmD6CYvFSLt0NReGlc2qSY4bO4Oq0L56OiD9pDG41Kj/zFmVY/A3Wvmn4BqKcfq5H30LGIg==
+  dependencies:
+    bytes "^3.1.2"
+    compressible "^2.0.18"
+    http-errors "^1.8.1"
+    koa-is-json "^1.0.0"
+
 koa-convert@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmmirror.com/koa-convert/-/koa-convert-2.0.0.tgz#86a0c44d81d40551bae22fee6709904573eea4f5"
@@ -1283,6 +1308,11 @@ koa-convert@^2.0.0:
   dependencies:
     co "^4.6.0"
     koa-compose "^4.1.0"
+
+koa-is-json@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/koa-is-json/-/koa-is-json-1.0.0.tgz#273c07edcdcb8df6a2c1ab7d59ee76491451ec14"
+  integrity sha512-+97CtHAlWDx0ndt0J8y3P12EWLwTLMXIfMnYDev3wOTwH/RpBGMlfn4bDXlMEg1u73K6XRE9BbUp+5ZAYoRYWw==
 
 koa-send@3.3.0:
   version "3.3.0"
@@ -1395,7 +1425,7 @@ micromatch@^4.0.2, micromatch@^4.0.4:
     braces "^3.0.2"
     picomatch "^2.3.1"
 
-mime-db@1.52.0:
+mime-db@1.52.0, "mime-db@>= 1.43.0 < 2":
   version "1.52.0"
   resolved "https://registry.npmmirror.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==

@@ -36,11 +36,18 @@ module.exports = {
   // gitea url 结尾不要 /
   giteaUrl: 'https://gitea.com',
   // user 白名单
-  whiteList: [],
+  whiteList: ['kongxiangyiren'],
   // user 黑名单 如果whiteList配置了就失效
   blackList: [],
   // 缓存文件后缀名，如果匹配设置缓存30天
-  cacheSuffixName: /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i
+  cacheSuffixName: /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i,
+  // gzip
+  gzip: {
+    // gzip开关
+    enable: true,
+    // 要压缩的最小响应大小(以字节为单位)。默认为1024字节或1KB。
+    threshold: 1024
+  }
 };
 ```
 
