@@ -26,8 +26,9 @@
         <h4>You're done!</h4>
         <p>Access your new website using this link:
           <code class="code">
-                          {{ protocol }}//USERNAME.{{ host }}
-                        </code>
+                    {{ protocol }}//USERNAME.{{ host }}
+                                                                     </code>
+        </p>
         <div class="divider">
           <hr>or
           <hr>
@@ -37,7 +38,7 @@
         <p>Then, add a CNAME record for that domain:
           <code class="code">USERNAME.{{ host }}</code>
         </p>
-        </p>
+
       </div>
     </div>
   </div>
@@ -115,10 +116,13 @@ const protocol = location.protocol, host = location.host
         border-radius: 2px
       }
 
-      .divider {
+
+    }
+
+    .divider {
         display: flex;
         align-items: center;
-        margin: 20px auto;
+        margin: 20px;
 
         hr {
           height: 1px;
@@ -136,6 +140,6 @@ const protocol = location.protocol, host = location.host
           }
         }
       }
-    }
   }
-}</style>
+}
+</style>

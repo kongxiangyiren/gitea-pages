@@ -8,7 +8,8 @@
     "postinstall": "cd ./view/vue-pages && npm i && cd ../../ && patch-package",
     "start": "concurrently \"cd ./view/vue-pages && npm run watch\" \"node development.js\"",
     "compile": "cd ./view/vue-pages && npm run build && cd ../../ && npm run format && npm run lint && tsc",
-    "lint": "tslint \"src/**/*.ts\"",
+    "lint": "tslint \"src/**/*.ts\" --fix",
+    "view:lint":"cd ./view/vue-pages && npm run format && npm run lint",
     "vercel-build": "npm run compile",
     "build": "node build.mjs",
     "format": "prettier --write src/",
@@ -30,6 +31,11 @@
     ],
     "outputPath": "dist-pkg"
   },
+  "pre-commit": [
+    "view:lint",
+    "format",
+    "lint"
+  ],
   "dependencies": {
     "axios": "^1.6.5",
     "commander": "^9.5.0",
@@ -53,6 +59,7 @@
     "node-notifier": "^10.0.1",
     "patch-package": "^8.0.0",
     "pkg": "5.8.1",
+    "pre-commit": "^1.2.2",
     "prettier": "^3.1.1",
     "resedit": "^2.0.0",
     "think-inspect": "0.0.2",
