@@ -3,6 +3,7 @@ import axios from 'axios';
 import dnsSync from 'dns-sync';
 import mime from 'mime';
 import { extname } from 'path';
+import { types } from 'util';
 export default class extends Base {
   async indexAction() {
     const pages = this.removeLastOccurrence(this.ctx.host, this.config('pagesDomainName'));
@@ -24,13 +25,13 @@ export default class extends Base {
         // 有Gitea用户名
 
         // 如果白名单存在,并且不存在pagesList[0]
-        const whiteList = this.config('whiteList') ?? [];
+        const whiteList = Array.isArray(this.config('whiteList')) ? this.config('whiteList') : [];
         if (!think.isEmpty(whiteList) && !whiteList.includes(pagesList[0])) {
           this.ctx.status = 404;
           return this.display('404');
         }
         // 如果白名单不存在,黑名单存在,并且不存在pagesList[0]
-        const blackList = this.config('blackList') ?? [];
+        const blackList = Array.isArray(this.config('blackList')) ? this.config('blackList') : [];
         if (
           think.isEmpty(whiteList) &&
           !think.isEmpty(blackList) &&
@@ -72,7 +73,15 @@ export default class extends Base {
 
           // 设置缓存30天
           if (
+            // 匹配正则
             !think.isEmpty(this.config('cacheSuffixName')) &&
+            types.isRegExp(this.config('cacheSuffixName')) &&
+            this.config('cacheSuffixName').test(extname(this.ctx.url.split('/').pop()))
+          ) {
+            this.ctx.set('cache-control', 'max-age=' + 30 * 24 * 60 * 60);
+          } else if (
+            // 不匹配正则且不是false
+            this.config('cacheSuffixName') !== false &&
             /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i.test(
               extname(this.ctx.url.split('/').pop())
             )
