@@ -34,6 +34,10 @@ function build() {
   fs.cpSync('./pm2.json', './dist/pm2.json');
 
   delete pac.devDependencies;
+  delete pac['pre-commit'];
+  delete pac.pkg;
+  delete pac.bin;
+  delete pac.thinkjs;
   pac.scripts = { start: 'node ./production.js' };
   fs.writeFileSync('./dist/package.json', JSON.stringify(pac, null, 2));
 }
