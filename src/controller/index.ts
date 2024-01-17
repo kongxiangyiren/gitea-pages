@@ -95,7 +95,7 @@ export default class extends Base {
           this.ctx.status = error.response.status;
           // 404解析
           if (error.response.status === 404) {
-            if (this.ctx.url !== '/' && this.ctx.url !== '/index.html')
+            if (this.ctx.url !== '/' && this.ctx.url !== '/index.html') {
               // spa解析
               try {
                 await axios.get(
@@ -105,6 +105,7 @@ export default class extends Base {
                 this.ctx.status = 200;
                 return this.indexAction();
               } catch (error) {}
+            }
             // 404页面解析
             try {
               const response = await axios.get(
