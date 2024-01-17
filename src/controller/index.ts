@@ -5,7 +5,7 @@ import mime from 'mime';
 import { extname } from 'path';
 import { types } from 'util';
 export default class extends Base {
-  async indexAction() {
+  async indexAction(): Promise<any> {
     const pages = this.removeLastOccurrence(this.ctx.host, this.config('pagesDomainName'));
 
     if (pages === false) {
@@ -40,6 +40,7 @@ export default class extends Base {
           this.ctx.status = 404;
           return this.display('404');
         }
+
         // 判断有没有 CNAME 文件
         try {
           const response = await axios.get(
@@ -94,10 +95,22 @@ export default class extends Base {
           this.ctx.status = error.response.status;
           // 404解析
           if (error.response.status === 404) {
+            if (this.ctx.url !== '/' && this.ctx.url !== '/index.html')
+              // spa解析
+              try {
+                await axios.get(
+                  `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main/.spa`
+                );
+                this.ctx.url = '/';
+                this.ctx.status = 200;
+                return this.indexAction();
+              } catch (error) {}
+            // 404页面解析
             try {
               const response = await axios.get(
                 `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main/404.html`
               );
+              this.ctx.status = 404;
               this.ctx.body = response.data;
             } catch (error) {
               return this.display('404');
