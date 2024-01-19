@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'node:url';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import importToCDN, { autoComplete } from 'vite-plugin-cdn-import';
+import { Plugin as importToCDN, autoComplete } from 'vite-plugin-cdn-import';
 import simpleHtmlPlugin from 'vite-plugin-simple-html';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -12,8 +12,7 @@ export default defineConfig({
   plugins: [
     vue(),
     // cdn
-    // @ts-expect-error
-    importToCDN.default({
+    importToCDN({
       prodUrl: 'https://registry.npmmirror.com/{name}/{version}/files/{path}',
       modules: [
         // vue

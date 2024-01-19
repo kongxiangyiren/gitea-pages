@@ -2,6 +2,7 @@
   "name": "vue-pages",
   "version": "0.0.0",
   "type": "module",
+  "license":"MIT",
   "scripts": {
     "dev": "vite",
     "watch": "concurrently \"vite build --watch --config script/index.config.ts\" \"vite build --watch --config script/notFound.config.ts\"",
