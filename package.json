@@ -1,7 +1,7 @@
 {
   "name": "gitea-pages",
   "description": "gitea pages",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "author": "空巷一人",
   "bin": "pkg-run.js",
   "scripts": {
