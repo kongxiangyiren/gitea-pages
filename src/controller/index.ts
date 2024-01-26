@@ -41,83 +41,151 @@ export default class extends Base {
           return this.display('404');
         }
 
+        // 获取文件树缓存
+        let tree: Array<{
+          path: string;
+          type: string;
+        }> = await this.cache(`gitea-pages:tree:${pagesList[0]}`);
+        if (think.isEmpty(tree)) {
+          let trees;
+          // 获取项目根目录文件树
+          try {
+            trees = await axios.get(
+              `${this.config('giteaUrl')}/api/v1/repos/${
+                pagesList[0]
+              }/pages/git/trees/main?recursive=true`
+            );
+          } catch (error) {
+            this.ctx.status = 404;
+            return this.display('404');
+          }
+          if (!(trees && trees.data && trees.data.tree)) {
+            this.ctx.status = 404;
+            return this.display('404');
+          }
+          const data = (
+            trees.data.tree as Array<{
+              path: string;
+              mode: string;
+              type: string;
+              size: number;
+              sha: string;
+              url: string;
+            }>
+          ).map((item) => ({
+            ...item,
+            mode: undefined,
+            size: undefined,
+            url: undefined,
+            sha: undefined
+          }));
+          tree = data;
+          // 缓存10分钟
+          await this.cache(`gitea-pages:tree:${pagesList[0]}`, data, {
+            timeout: 10 * 60 * 1000
+          });
+        }
+
         // 判断有没有 CNAME 文件
-        try {
-          const response = await axios.get(
-            `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main/CNAME`
-          );
-
-          if (
-            this.isDomain(response.data.toString().trim()) &&
-            this.ctx.host !== response.data.toString().trim()
-          ) {
-            this.ctx.status = 301;
-            return this.redirect(`http://${response.data.toString().trim()}${this.ctx.url}`);
-          }
-        } catch (error) {}
-
-        // url解析
-        try {
-          const url = `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main${
-            this.ctx.url === '/' ? '/index.html' : this.ctx.url
-          }`;
-
-          const response = await axios.get(url, { responseType: 'arraybuffer' });
-
-          // 修改MIME类型
-          this.ctx.set(
-            'Content-Type',
-            mime.getType(
-              this.ctx.url.split('/').pop() === '' ? 'index.html' : this.ctx.url.split('/').pop()
-            ) ?? 'text/plain'
-          );
-
-          // 设置缓存30天
-          if (
-            // 匹配正则
-            !think.isEmpty(this.config('cacheSuffixName')) &&
-            types.isRegExp(this.config('cacheSuffixName')) &&
-            this.config('cacheSuffixName').test(extname(this.ctx.url.split('/').pop()))
-          ) {
-            this.ctx.set('cache-control', 'max-age=' + 30 * 24 * 60 * 60);
-          } else if (
-            // 不匹配正则且不是false
-            this.config('cacheSuffixName') !== false &&
-            /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i.test(
-              extname(this.ctx.url.split('/').pop())
-            )
-          ) {
-            this.ctx.set('cache-control', 'max-age=' + 30 * 24 * 60 * 60);
-          }
-
-          this.ctx.body = response.data; // 将响应数据设置为Koa的响应体
-        } catch (error) {
-          this.ctx.status = error.response.status;
-          // 404解析
-          if (error.response.status === 404) {
-            if (this.ctx.url !== '/' && this.ctx.url !== '/index.html') {
-              // spa解析
-              try {
-                await axios.get(
-                  `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main/.spa`
-                );
-                this.ctx.url = '/';
-                this.ctx.status = 200;
-                return this.indexAction();
-              } catch (error) {}
-            }
-            // 404页面解析
+        if (tree.find((item) => item.path === 'CNAME')) {
+          // 获取cname缓存
+          let CNAME = await this.cache(`gitea-pages:cname:${pagesList[0]}`);
+          // 如果缓存不存在
+          if (think.isEmpty(CNAME)) {
             try {
               const response = await axios.get(
-                `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main/404.html`
+                `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main/CNAME`
               );
-              this.ctx.status = 404;
-              this.ctx.body = response.data;
-            } catch (error) {
-              return this.display('404');
-            }
+              if (this.isDomain(response.data.toString().trim())) {
+                CNAME = response.data.toString().trim();
+                await this.cache(
+                  `gitea-pages:cname:${pagesList[0]}`,
+                  response.data.toString().trim(),
+                  {
+                    timeout: 10 * 60 * 1000
+                  }
+                );
+              }
+            } catch (error) {}
+          }
+
+          if (this.ctx.host !== CNAME) {
+            this.ctx.status = 301;
+            return this.redirect(`http://${CNAME}${this.ctx.url}`);
           }
         }
+        // url解析
+        this.ctx.url = this.ctx.url === '/' ? '/index.html' : this.ctx.url;
+        if (
+          !['CNAME', '.github', '404.html', '.spa'].includes(this.ctx.url.split('/')[1]) &&
+          tree.find((item) => item.path === this.ctx.url.slice(1) && item.type !== 'tree')
+        ) {
+          try {
+            const url = `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main${
+              this.ctx.url
+            }`;
+            const response = await axios.get(url, { responseType: 'arraybuffer' });
+            // 修改MIME类型
+            this.ctx.set(
+              'Content-Type',
+              mime.getType(
+                this.ctx.url.split('/').pop() === '' ? 'index.html' : this.ctx.url.split('/').pop()
+              ) ?? 'text/plain'
+            );
+
+            // 设置缓存30天
+            if (
+              // 匹配正则
+              !think.isEmpty(this.config('cacheSuffixName')) &&
+              types.isRegExp(this.config('cacheSuffixName')) &&
+              this.config('cacheSuffixName').test(extname(this.ctx.url.split('/').pop()))
+            ) {
+              this.ctx.set('cache-control', 'max-age=' + 30 * 24 * 60 * 60);
+            } else if (
+              // 不匹配正则且不是false
+              this.config('cacheSuffixName') !== false &&
+              /.(gif|png|jpe?g|css|js|woff|woff2|ttf|webp|ico)$/i.test(
+                extname(this.ctx.url.split('/').pop())
+              )
+            ) {
+              this.ctx.set('cache-control', 'max-age=' + 30 * 24 * 60 * 60);
+            }
+            this.ctx.status = 200;
+            return (this.ctx.body = response.data); // 将响应数据设置为Koa的响应体
+          } catch (error) {
+            await this.cache(`gitea-pages:tree:${pagesList[0]}`, null);
+            await this.cache(`gitea-pages:cname:${pagesList[0]}`, null);
+          }
+        }
+        // 文件更新，更新缓存
+        if (think.isEmpty(tree)) {
+          return this.indexAction();
+        }
+
+        // spa 项目判断
+        if (
+          tree.find((item) => item.path === '.spa' && item.type !== 'tree') &&
+          tree.find((item) => item.path === 'index.html' && item.type !== 'tree')
+        ) {
+          this.ctx.url = '/';
+          this.ctx.status = 200;
+          return this.indexAction();
+        }
+
+        // 有404页
+        if (tree.find((item) => item.path === '404.html' && item.type !== 'tree')) {
+          try {
+            const response = await axios.get(
+              `${this.config('giteaUrl')}/${pagesList[0]}/pages/raw/branch/main/404.html`
+            );
+            this.ctx.status = 404;
+            return (this.ctx.body = response.data);
+          } catch (error) {}
+        }
+
+        // 默认404
+        this.ctx.status = 404;
+        return this.display('404');
       } else {
         // 有Gitea用户名 但是 多了
         this.ctx.status = 404;

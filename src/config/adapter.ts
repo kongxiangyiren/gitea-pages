@@ -3,7 +3,8 @@ import path from 'path';
 import nunjucks from 'think-view-nunjucks';
 import fileSession from 'think-session-file';
 import fileCache from 'think-cache-file';
-const { Console, File, DateFile } = require('think-logger3');
+import redisCache from 'think-cache-redis';
+import { Console, File, DateFile } from 'think-logger3';
 const isDev = think.env === 'development' || think.env === 'vercel';
 const isVercel = think.env === 'vercel';
 const isPkg = think.env === 'pkg';
@@ -21,6 +22,13 @@ export const cache = {
       : path.join(isPkg ? process.cwd() : think.ROOT_PATH, 'runtime/cache'),
     pathDepth: 1,
     gcInterval: 24 * 60 * 60 * 1000 // gc interval
+  },
+  redis: {
+    handle: redisCache,
+    port: 6379,
+    host: '127.0.0.1',
+    password: '',
+    db: 0
   }
 };
 

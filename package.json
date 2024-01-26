@@ -45,6 +45,7 @@
     "mime": "^3.0.0",
     "think-cache": "^1.1.2",
     "think-cache-file": "^1.1.2",
+    "think-cache-redis": "^1.2.6",
     "think-logger3": "^1.4.0",
     "think-session": "^1.1.6",
     "think-session-file": "^1.1.4",
@@ -77,6 +78,7 @@
     "ms": "^2.0.0",
     "xml2js": "^0.5.0",
     "validator": "^13.7.0",
+    "ioredis": "~5.3.2",
     "think-payload": "file:pack/think-payload-1.4.0.tgz",
     "think-validator": "file:pack/think-validator-1.6.7.tgz"
   },
@@ -86,6 +88,7 @@
     "ms": "^2.0.0",
     "xml2js": "^0.5.0",
     "validator": "^13.7.0",
+    "ioredis": "~5.3.2",
     "think-payload": "file:pack/think-payload-1.4.0.tgz",
     "think-validator": "file:pack/think-validator-1.6.7.tgz"
   },
