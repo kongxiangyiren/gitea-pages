@@ -58,7 +58,6 @@
     "@types/koa": "*",
     "@types/koa-compress": "^4.0.6",
     "@types/node": "12.20.11",
-    "@types/validator": "^13.11.7",
     "concurrently": "^8.2.2",
     "node-notifier": "^10.0.1",
     "patch-package": "^8.0.0",
@@ -77,7 +76,7 @@
     "formidable": "^2.1.2",
     "ms": "^2.0.0",
     "xml2js": "^0.5.0",
-    "validator": "^13.7.0",
+    "validator": "file:pack/validator-13.11.0.tgz",
     "ioredis": "~5.3.2",
     "think-payload": "file:pack/think-payload-1.4.0.tgz",
     "think-validator": "file:pack/think-validator-1.6.7.tgz"
@@ -87,7 +86,7 @@
     "formidable": "^2.1.2",
     "ms": "^2.0.0",
     "xml2js": "^0.5.0",
-    "validator": "^13.7.0",
+    "validator": "file:pack/validator-13.11.0.tgz",
     "ioredis": "~5.3.2",
     "think-payload": "file:pack/think-payload-1.4.0.tgz",
     "think-validator": "file:pack/think-validator-1.6.7.tgz"
