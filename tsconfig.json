@@ -1,28 +1,22 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2017",
-    "noImplicitAny": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": false,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": true,
     "esModuleInterop": true,
-    "outDir": "app",
-    "baseUrl": ".",
+    "isolatedModules": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "incremental": true,
     "skipLibCheck": true,
-    "moduleResolution": "Node",
-    "declaration": false,
-    "resolveJsonModule": true,
-    "types": [
-      "node"
-    ]
-  },
-  "include": [
-    "src/**/*.ts",
-    "./env.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "types": ["vitest/globals", "node"]
+  }
 }

@@ -1,15 +1,19 @@
 {
-  "apps": [{
-    "name": "gitea-pages",
-    "script": "production.js",
-    "cwd": "./",
-    "exec_mode": "fork",
-    "max_memory_restart": "1G",
-    "autorestart": true,
-    "node_args": [],
-    "args": [],
-    "env": {
-      
+  "apps": [
+    {
+      "name": "gitea-pages",
+      "script": "dist/main.mjs",
+      "exec_mode": "fork",
+      "instances": 1,
+      "max_memory_restart": "1G",
+      "autorestart": true,
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "out_file": "./logs/out.log",
+      "error_file": "./logs/err.log",
+      "merge_logs": true,
+      "time": true
     }
-  }]
+  ]
 }

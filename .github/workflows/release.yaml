@@ -1,0 +1,81 @@
+name: 创建发行版
+
+permissions:
+  contents: write
+  discussions: write
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  # push tag 事件里没有 release 对象，直接用 ref（如 refs/tags/v1.0.0）
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # 统一用 macOS 构建：darwin 产物的 ad-hoc 签名必须在 macOS 宿主完成，
+  # win/linux 产物不依赖宿主平台，一次构建即可覆盖全部目标
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - uses: pnpm/setup@v2
+        with:
+          version: 11
+          runtime: node@26.8.1
+          cache: true
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      # TS_EXE 开启后 tsdown 会同时输出 JS 产物（dist/main.mjs）
+      # 和四个平台可执行文件（build/gitea-pages-*），构建一次即可
+      - name: 构建
+        env:
+          TS_EXE: 'true'
+        run: pnpm run build
+
+      - name: 打包发行产物
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release
+
+          # 各平台压缩包：可执行文件 + config.js
+          # win 打 zip，其余打 tar.gz
+          for f in build/gitea-pages-*; do
+            bin=$(basename "$f")
+            name="${bin%.exe}" # gitea-pages-<platform>-<arch>
+            stage="stage/$name"
+            mkdir -p "$stage"
+            cp "$f" "$stage/$bin"
+            cp config.js "$stage/"
+            if [[ "$name" == *-win-* ]]; then
+              (cd "$stage" && zip -q -r "$name.zip" .)
+              mv "$stage/$name.zip" release/
+            else
+              tar -czf "release/$name.tar.gz" -C "$stage" .
+            fi
+          done
+
+          # dist.zip：JS 构建（dist/）+ config.js
+          mkdir -p stage/dist-pkg/dist
+          cp config.js stage/dist-pkg/
+          cp dist/* stage/dist-pkg/dist/
+          (cd stage/dist-pkg && zip -q -r dist.zip .)
+          mv stage/dist-pkg/dist.zip release/
+
+          rm -rf stage
+          echo '---- 发行产物 ----'
+          ls -lh release/
+
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: release/*
+          fail_on_unmatched_files: true

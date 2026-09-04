@@ -1,112 +1,59 @@
 {
   "name": "gitea-pages",
-  "description": "gitea pages",
-  "version": "0.1.0",
-  "author": "空巷一人",
-  "bin": "pkg-run.js",
+  "version": "0.2.0",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
   "scripts": {
-    "postinstall": "cd ./view/vue-pages && npm i && cd ../../ && patch-package",
-    "start": "concurrently \"cd ./view/vue-pages && npm run watch\" \"node development.js\"",
-    "dev": "node development.js",
-    "compile": "cd ./view/vue-pages && npm run build && cd ../../ && npm run format && npm run lint && tsc",
-    "lint": "tslint \"src/**/*.ts\" --fix",
-    "view:lint": "cd ./view/vue-pages && npm run format && npm run lint",
-    "vercel-build": "npm run compile",
-    "build": "node build.mjs",
-    "format": "prettier --write src/",
-    "pkg": "npm run compile && pkg . -C GZip --no-bytecode --public-packages \"*\" --public && node pkg-edit.mjs"
+    "release": "bumpp",
+    "build": "tsdown",
+    "deploy": "nest deploy",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main.mjs",
+    "lint": "oxlint src/ test/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:debug": "vitest --inspect-brk --no-file-parallelism",
+    "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
   },
-  "pkg": {
-    "scripts": [
-      "config.js"
-    ],
-    "assets": [
-      "./node_modules/axios/dist/node/axios.cjs",
-      "app/**/*",
-      "view/404.html",
-      "view/index.html"
-    ],
-    "targets": [
-      "node12-win-x64",
-      "node12-linux-x64"
-    ],
-    "outputPath": "dist-pkg"
-  },
-  "pre-commit": [
-    "view:lint",
-    "format",
-    "lint"
-  ],
   "dependencies": {
-    "axios": "^1.6.5",
-    "commander": "^9.5.0",
-    "dns-sync": "^0.2.1",
-    "koa-compress": "^5.1.1",
-    "mime": "^3.0.0",
-    "think-cache": "^1.1.2",
-    "think-cache-file": "^1.1.2",
-    "think-cache-redis": "^1.2.6",
-    "think-logger3": "^1.4.0",
-    "think-session": "^1.1.6",
-    "think-session-file": "^1.1.4",
-    "think-view": "^1.0.13",
-    "think-view-nunjucks": "^1.0.11",
-    "thinkjs": "^3.2.15",
-    "thinkjs3-ts": "^1.0.1"
+    "@keyv/redis": "^5.1.6",
+    "@nestjs/common": "^12.0.1",
+    "@nestjs/core": "^12.0.1",
+    "@nestjs/platform-express": "^12.0.1",
+    "axios": "^1.20.0",
+    "compression": "^1.8.1",
+    "keyv": "^5.6.0",
+    "keyv-file": "^5.3.5",
+    "mime": "^4.1.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@types/koa": "*",
-    "@types/koa-compress": "^4.0.6",
-    "@types/node": "12.20.11",
-    "concurrently": "^8.2.2",
-    "node-notifier": "^10.0.1",
-    "patch-package": "^8.0.0",
-    "pkg": "5.8.1",
-    "pre-commit": "^1.2.2",
-    "prettier": "^3.1.1",
-    "resedit": "^2.0.0",
-    "think-inspect": "0.0.2",
-    "think-typescript": "^2.0.0",
-    "think-watcher": "^3.0.4",
-    "tslint": "^5.20.1",
-    "typescript": "^4.9.5"
-  },
-  "resolutions": {
-    "think-helper": "^1.1.4",
-    "formidable": "^2.1.2",
-    "ms": "^2.0.0",
-    "xml2js": "^0.5.0",
-    "validator": "file:pack/validator-13.11.0.tgz",
-    "ioredis": "~5.3.2",
-    "think-payload": "file:pack/think-payload-1.4.0.tgz",
-    "think-validator": "file:pack/think-validator-1.6.7.tgz"
-  },
-  "overrides": {
-    "think-helper": "^1.1.4",
-    "formidable": "^2.1.2",
-    "ms": "^2.0.0",
-    "xml2js": "^0.5.0",
-    "validator": "file:pack/validator-13.11.0.tgz",
-    "ioredis": "~5.3.2",
-    "think-payload": "file:pack/think-payload-1.4.0.tgz",
-    "think-validator": "file:pack/think-validator-1.6.7.tgz"
-  },
-  "repository": "",
-  "license": "MIT",
-  "engines": {
-    "node": "^12.20.0 || >=14",
-    "npm": ">= 8"
-  },
-  "readmeFilename": "README.md",
-  "thinkjs": {
-    "metadata": {
-      "name": "gitea-pages",
-      "description": "gitea pages",
-      "author": "空巷一人"
-    },
-    "projectName": "gitea-pages",
-    "template": "kongxiangyiren/typescript",
-    "clone": false,
-    "isMultiModule": false
+    "@nestjs/cli": "^12.0.0",
+    "@nestjs/mau": "^0.2.6",
+    "@nestjs/schematics": "^12.0.0",
+    "@nestjs/testing": "^12.0.1",
+    "@tsdown/exe": "^0.22.14",
+    "@types/compression": "^1.8.1",
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.0.0",
+    "@types/supertest": "^7.0.0",
+    "@vitest/coverage-v8": "^4.1.2",
+    "bumpp": "^12.3.0",
+    "oxlint": "^1.58.0",
+    "prettier": "^3.4.2",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.0.0",
+    "tsdown": "^0.22.14",
+    "typescript": "^6.0.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.1.2"
   }
 }

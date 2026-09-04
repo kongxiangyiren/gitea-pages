@@ -1,13 +1,31 @@
-version: '3'
 services:
   gitea-pages:
-    container_name: gitea-pages
-    build: # 使用 Dockerfile 本地构建
+    build:
       context: ./
+    container_name: gitea-pages
     restart: always
     ports:
-      - '8360:8360' # 映射端口，格式"主机端口:容器内部端口"
+      - '8360:8360'
+    # 子域名路由依赖 Host 头，反代（nginx/IIS）必须透传 Host
+    environment:
+      # PORT 优先级高于 config.js 的 port
+      # PORT: 8360
+      TZ: Asia/Shanghai
     volumes:
-      - ./view/:/app/view/
-      - ./logs/:/app/logs/
-      - ./config.js:/app/config.js
+      # 外部配置：修改后 docker compose restart gitea-pages 生效
+      - ./config.js:/app/config.js:ro
+      # 运行期产物（文件缓存 runtime/cache）：持久化，容器重建后缓存不丢
+      # Linux 宿主机首次使用请确保目录可写：mkdir -p runtime && sudo chown -R 1000:1000 runtime
+      - ./runtime:/app/runtime
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:8360/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
